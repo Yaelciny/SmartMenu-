@@ -3,11 +3,11 @@ package org.utl.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "platillo")
-data class Platillo (
+@Entity(tableName = "cliente")
+data class Cliente (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    //pendiente datos aun ya q es de mostrador
     val nombre: String,
-    val precio: Double,
-    val disponible: Boolean
+    val historial: String?
 )
