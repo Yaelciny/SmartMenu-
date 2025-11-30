@@ -18,5 +18,5 @@ class UsuarioRepository (private val usuarioDao: UsuarioDao) {
         return usuarioDao.iniciarSesion(email,password)
     }
 
-    
+
 }
