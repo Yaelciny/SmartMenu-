@@ -9,8 +9,11 @@ class PlatilloRepository (private val platilloDao: PlatilloDao) {
 
     val allPlatillos: Flow<List<Platillo>> = platilloDao.getAllPlatillos()
 
-    suspend fun insertPlatillo (platillo: Platillo): Int{
+    suspend fun insertPlatillo (platillo: Platillo): Long{
         return platilloDao.insertPlatillo(platillo)
     }
 
+    suspend fun insertarVarios(platillos: List<Platillo>) {
+        platilloDao.insertarVarios(platillos)
+    }
 }

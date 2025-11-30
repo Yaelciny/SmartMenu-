@@ -12,9 +12,13 @@ interface PlatilloDao {
 
     //insertar platillo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlatillo(platillo: Platillo): Int
+    suspend fun insertPlatillo(platillo: Platillo): Long
 
     @Query ("SELECT * FROM platillo")
     fun getAllPlatillos (): Flow<List<Platillo>>
+
+    // Insertar varios de golpe
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertarVarios(platillos: List<Platillo>)
 
 }

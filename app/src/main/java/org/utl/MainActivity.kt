@@ -12,19 +12,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.utl.db.AppDataBase
+import org.utl.db.PlatilloRepository
 import org.utl.ui.theme.SmartMenuTheme
 import org.utl.ui.theme.screens.LoginScreen
 import org.utl.ui.theme.screens.MenuScreen
+import org.utl.ui.theme.screens.ResumenScreen
+import org.utl.viewmodel.MenuViewModel
+import org.utl.viewmodel.MenuViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //INICIALIZAR LA BASE DE DATOS Y EL REPOSITORIO
+        // Obtenemos la instancia de la BD
+        val database = AppDataBase.getDatabase(applicationContext)
+        // Creamos el repositorio con el DAO de esa BD
+        val repository = PlatilloRepository(database.platilloDao())
+        // Creamos la fábrica para el ViewModel
+        val factory = MenuViewModelFactory(repository)
         setContent {
             SmartMenuTheme {
                 val navController = rememberNavController()
+                val sharedMenuViewModel: MenuViewModel = viewModel(factory = factory)
                 NavHost(navController = navController, startDestination = "login"){
                     composable("login") {
                         LoginScreen(
@@ -36,13 +50,29 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("menu") {
-                        MenuScreen()
+                        MenuScreen(
+                            viewModel = sharedMenuViewModel,
+                            onVerPedidoClick = {
+                                // Navegamos a la nueva pantalla
+                                navController.navigate("resumen")
+                            }
+                        )
                     }
-                }
+
+                    composable("resumen"){
+                        ResumenScreen(
+                            viewModel = sharedMenuViewModel,
+                            onBackClick = {navController.popBackStack()},
+                            onConfirmarClick = {
+                                println("Pedido Enviado")
+                                navController.popBackStack()
+                            }
+                        )
+                    }
             }
         }
     }
-}
+}}
 
 
 @Preview(showBackground = true)
