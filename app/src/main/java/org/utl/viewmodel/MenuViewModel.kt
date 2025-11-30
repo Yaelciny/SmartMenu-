@@ -49,6 +49,8 @@ class MenuViewModel(private val repository: PlatilloRepository) : ViewModel(){
     }
 
     fun agregarAlPedido(platillo: Platillo){
+        //esta funcion keda pendiente de cambiar adapatandola
+        //a pedido y pedido detalle
         _uiState.update { estadoActual ->
             val nuevaLista = estadoActual.pedidoActual + platillo
             val nuevoTotal = estadoActual.total + platillo.precio
