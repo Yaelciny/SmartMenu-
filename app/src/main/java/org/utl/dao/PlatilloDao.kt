@@ -20,5 +20,4 @@ interface PlatilloDao {
     // Insertar varios de golpe
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertarVarios(platillos: List<Platillo>)
-
 }
