@@ -4,15 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import org.utl.dao.MesaDao
 import org.utl.dao.PlatilloDao
+import org.utl.model.Mesa
 import org.utl.model.Platillo
 
 // Agrega aki tus las otras cuando esten listas
 // por ahora solo con Platillo
-@Database(entities = [Platillo::class], version = 1)
+@Database(entities = [Platillo::class, Mesa::class], version = 2)
 abstract class AppDataBase : RoomDatabase(){
 
     abstract fun platilloDao(): PlatilloDao
+
+    abstract fun mesaDao(): MesaDao
 
     companion object {
         @Volatile
