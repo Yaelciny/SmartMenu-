@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Pedido(
     //aki van solo datos generales del pedido: mesa y estado
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val mesa: Int,
     val estado: String //aki podemos poner si esta pendiente, finalizado, en proceso y asi
 )

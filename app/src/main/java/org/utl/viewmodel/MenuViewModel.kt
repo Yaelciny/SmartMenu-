@@ -11,10 +11,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
+import org.utl.model.Pedido
+import org.utl.model.PedidoDetalle
 import org.utl.model.Platillo
 
-class MenuViewModel(private val repository: PlatilloRepository) : ViewModel(){
+class MenuViewModel(
+    private val repository: PlatilloRepository,
+    private val pedidoRepository: PedidoRepository
+        ) : ViewModel(){
     //El estado privado significa que solo el viewmodel lo puede modificar
     private val _uiState = MutableStateFlow(MenuUiState())
     //El estado publico la ui solo se puede leer
@@ -59,6 +65,45 @@ class MenuViewModel(private val repository: PlatilloRepository) : ViewModel(){
                 pedidoActual = nuevaLista,
                 total = nuevoTotal
             )
+        }
+    }
+
+    fun confirmarPedido(){
+        viewModelScope.launch {
+            val estadoActual = _uiState.value
+
+            if (estadoActual.pedidoActual.isNotEmpty()) {
+
+                //Crear el Encabezado del Pedido
+                val nuevoPedido = Pedido(
+                    mesa = 1, // Fijo por ahora
+                    estado = "Pendiente"
+                )
+                val idPedidoGenerado = pedidoRepository.insertPedido(nuevoPedido)
+
+                // Agrupar platillos iguales para sacar la cantidad
+                // Convertimos la lista plana (Hamburguesa, Refresco, Hamburguesa)
+                // en un mapa: { Hamburguesa=2, Refresco=1 }
+                val platillosAgrupados = estadoActual.pedidoActual.groupingBy { it }.eachCount()
+
+                // Crear los objetos Detalle con los datos que pide tu tabla
+                val listaDetalles = platillosAgrupados.map { (platillo, cantidadContada) ->
+                    PedidoDetalle(
+                        idPedido = idPedidoGenerado.toInt(),
+                        idPlatillo = platillo.id,
+                        nombrePedido = platillo.nombre,
+                        precioPedido = platillo.precio,
+                        cantidad = cantidadContada
+                    )
+                }
+
+                pedidoRepository.insertDetalle(listaDetalles)
+
+                _uiState.update {
+                    it.copy(pedidoActual = emptyList(), total = 0.0)
+                }
+                println("Pedido #$idPedidoGenerado guardado con su detalle.")
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ import org.utl.model.Pedido
 import org.utl.model.PedidoDetalle
 import org.utl.model.Usuario
 
-class PedidoRepository (private val pedidoDao: PedidoDao, private val pedidoDetalleDao: PedidoDetalleDao){
+class  PedidoRepository (private val pedidoDao: PedidoDao, private val pedidoDetalleDao: PedidoDetalleDao){
 
     val allPedidos: Flow<List<Pedido>> = pedidoDao.getAllPedidos()
 

@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.utl.db.AppDataBase
+import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
 import org.utl.ui.theme.SmartMenuTheme
 import org.utl.ui.theme.screens.LoginScreen
@@ -32,9 +33,13 @@ class MainActivity : ComponentActivity() {
         // Obtenemos la instancia de la BD
         val database = AppDataBase.getDatabase(applicationContext)
         // Creamos el repositorio con el DAO de esa BD
-        val repository = PlatilloRepository(database.platilloDao())
+        val platilloRepo = PlatilloRepository(database.platilloDao())
+        val pedidoRepo = PedidoRepository(
+            database.pedidoDao(),
+            database.pedidoDetalleDao() // <--- FALTABA ESTO
+        )
         // Creamos la fábrica para el ViewModel
-        val factory = MenuViewModelFactory(repository)
+        val factory = MenuViewModelFactory(platilloRepo,pedidoRepo)
         setContent {
             SmartMenuTheme {
                 val navController = rememberNavController()
@@ -64,6 +69,7 @@ class MainActivity : ComponentActivity() {
                             viewModel = sharedMenuViewModel,
                             onBackClick = {navController.popBackStack()},
                             onConfirmarClick = {
+                                sharedMenuViewModel.confirmarPedido()
                                 println("Pedido Enviado")
                                 navController.popBackStack()
                             }

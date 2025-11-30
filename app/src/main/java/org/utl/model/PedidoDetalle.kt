@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class PedidoDetalle(
     //aki ya van datos van exactos: platillos y la cantidad (desglosado)
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int =0,
     val idPedido: Int, //para relacionar con pedido directamente
     val idPlatillo: Int, //para relacionar con platillos solicitados
     val nombrePedido: String,
