@@ -4,10 +4,11 @@ import kotlinx.coroutines.flow.Flow
 import org.utl.dao.PedidoDao
 import org.utl.dao.PedidoDetalleDao
 import org.utl.model.Pedido
+import org.utl.model.PedidoConDetalles
 import org.utl.model.PedidoDetalle
 import org.utl.model.Usuario
 
-class  PedidoRepository (private val pedidoDao: PedidoDao, private val pedidoDetalleDao: PedidoDetalleDao){
+class PedidoRepository (private val pedidoDao: PedidoDao, private val pedidoDetalleDao: PedidoDetalleDao){
 
     val allPedidos: Flow<List<Pedido>> = pedidoDao.getAllPedidos()
 
@@ -34,6 +35,14 @@ class  PedidoRepository (private val pedidoDao: PedidoDao, private val pedidoDet
         insertDetalle(detallesConId)
 
         return true
+    }
+
+    // Escuchar la cocina
+    val pedidosEnCocina: Flow<List<PedidoConDetalles>> = pedidoDao.obtenerPedidosPendientes()
+
+    // Marcar como listo
+    suspend fun finalizarPedido(id: Int) {
+        pedidoDao.terminarPedido(id)
     }
 
 }

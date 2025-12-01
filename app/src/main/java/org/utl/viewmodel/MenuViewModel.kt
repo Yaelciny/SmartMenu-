@@ -48,7 +48,7 @@ class MenuViewModel(
                 Platillo(nombre = "Hamburguesa Clásica", precio = 120.0, disponible = true),
                 Platillo(nombre = "Tacos de Asada", precio = 85.0, disponible = true),
                 Platillo(nombre = "Refresco", precio = 25.0, disponible = true),
-                Platillo(nombre = "Pastel de Chocolate", precio = 60.0, disponible = false)
+                Platillo(nombre = "Pastel de Chocolate", precio = 60.0, disponible = true)
             )
             repository.insertarVarios(listaPrueba)
         }
@@ -86,7 +86,7 @@ class MenuViewModel(
 
                 // Agrupar platillos iguales para sacar la cantidad
                 // Convertimos la lista plana (Hamburguesa, Refresco, Hamburguesa)
-                // en un mapa: { Hamburguesa=2, Refresco=1 }
+                // en un mapa: Hamburguesa=2, Refresco=1
                 val platillosAgrupados = estadoActual.pedidoActual.groupingBy { it }.eachCount()
 
                 // Crear los objetos Detalle con los datos que pide tu tabla

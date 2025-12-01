@@ -6,6 +6,9 @@ import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
 import org.utl.db.UsuarioRepository
 
+
+//Es el código que permite hacer Inyección de Dependencias manual
+// //para que tus pantallas puedan acceder a la base de datos de forma limpia.
 class AppViewModelFactory(
     private val platilloRepository: PlatilloRepository,
     private val pedidoRepository: PedidoRepository,
@@ -19,6 +22,10 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return LoginViewModel(usuarioRepository) as T
+        }
+        if (modelClass.isAssignableFrom(CocinaViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return CocinaViewModel(pedidoRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

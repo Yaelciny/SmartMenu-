@@ -14,12 +14,14 @@ import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
 import org.utl.db.UsuarioRepository
 import org.utl.ui.theme.SmartMenuTheme
+import org.utl.ui.theme.screens.CocinaScreen
 import org.utl.ui.theme.screens.LoginScreen
 import org.utl.ui.theme.screens.MenuScreen
 import org.utl.ui.theme.screens.MesasScreen
 import org.utl.ui.theme.screens.ResumenScreen
 import org.utl.viewmodel.MenuViewModel
 import org.utl.viewmodel.AppViewModelFactory
+import org.utl.viewmodel.CocinaViewModel
 import org.utl.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
             database.pedidoDetalleDao() // <--- FALTABA ESTO
         )
         val usuarioRepo = UsuarioRepository(database.usuarioDao())
+
         // Creamos la fábrica para el ViewModel
         val factory = AppViewModelFactory(platilloRepo,pedidoRepo,usuarioRepo)
         setContent {
@@ -42,15 +45,16 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val sharedMenuViewModel: MenuViewModel = viewModel(factory = factory)
                 val loginViewModel: LoginViewModel = viewModel(factory = factory)
+                val cocinaViewModel: CocinaViewModel = viewModel(factory = factory)
                 NavHost(navController = navController, startDestination = "login"){
                     composable("login") {
                         LoginScreen(
                             viewModel = loginViewModel,
                             onLoginSuccess = { rolDetectado ->
                                 // Si es Mesero o Admin -> Mesas
-                                // Si fuera Cocinero -> Cocina (aun no existe)
-                                val destino = if (rolDetectado == "Cocinero") "mesas" else "mesas"
-                                navController.navigate("mesas"){
+                                // Si fuera Cocinero -> Cocina
+                                val destino = if (rolDetectado == "Cocinero") "cocina" else "mesas"
+                                navController.navigate(destino){
                                     popUpTo("login"){ inclusive = true}
                                 }
                             }
@@ -75,6 +79,16 @@ class MainActivity : ComponentActivity() {
                             },
                             //Logica para cerrar sesion
                             onLgout = {
+                                navController.navigate("login"){
+                                    popUpTo(0) {inclusive = true}
+                                }
+                            }
+                        )
+                    }
+                    composable("cocina") {
+                        CocinaScreen(
+                            viewModel = cocinaViewModel,
+                            onLogout = {
                                 navController.navigate("login"){
                                     popUpTo(0) {inclusive = true}
                                 }
