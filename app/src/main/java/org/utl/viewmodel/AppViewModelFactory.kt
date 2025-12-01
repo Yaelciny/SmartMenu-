@@ -27,6 +27,10 @@ class AppViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return CocinaViewModel(pedidoRepository) as T
         }
+        if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return AdminViewModel(platilloRepository) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

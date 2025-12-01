@@ -14,11 +14,13 @@ import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
 import org.utl.db.UsuarioRepository
 import org.utl.ui.theme.SmartMenuTheme
+import org.utl.ui.theme.screens.AdminScreen
 import org.utl.ui.theme.screens.CocinaScreen
 import org.utl.ui.theme.screens.LoginScreen
 import org.utl.ui.theme.screens.MenuScreen
 import org.utl.ui.theme.screens.MesasScreen
 import org.utl.ui.theme.screens.ResumenScreen
+import org.utl.viewmodel.AdminViewModel
 import org.utl.viewmodel.MenuViewModel
 import org.utl.viewmodel.AppViewModelFactory
 import org.utl.viewmodel.CocinaViewModel
@@ -43,9 +45,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             SmartMenuTheme {
                 val navController = rememberNavController()
+                //Todos los ViewModels
                 val sharedMenuViewModel: MenuViewModel = viewModel(factory = factory)
                 val loginViewModel: LoginViewModel = viewModel(factory = factory)
                 val cocinaViewModel: CocinaViewModel = viewModel(factory = factory)
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 NavHost(navController = navController, startDestination = "login"){
                     composable("login") {
                         LoginScreen(
@@ -53,9 +57,23 @@ class MainActivity : ComponentActivity() {
                             onLoginSuccess = { rolDetectado ->
                                 // Si es Mesero o Admin -> Mesas
                                 // Si fuera Cocinero -> Cocina
-                                val destino = if (rolDetectado == "Cocinero") "cocina" else "mesas"
+                                val destino = when(rolDetectado) {
+                                    "Cocinero" -> "cocina"
+                                    "Administrador" -> "admin"
+                                    else -> "mesas"
+                                }
                                 navController.navigate(destino){
                                     popUpTo("login"){ inclusive = true}
+                                }
+                            }
+                        )
+                    }
+                    composable("admin") {
+                        AdminScreen(
+                            viewModel = adminViewModel,
+                            onLogout = {
+                                navController.navigate("login"){
+                                    popUpTo(0){ inclusive = true}
                                 }
                             }
                         )
@@ -64,7 +82,6 @@ class MainActivity : ComponentActivity() {
                         MenuScreen(
                             viewModel = sharedMenuViewModel,
                             onVerPedidoClick = {
-                                // Navegamos a la nueva pantalla
                                 navController.navigate("resumen")
                             }
                         )
@@ -103,6 +120,7 @@ class MainActivity : ComponentActivity() {
                             onConfirmarClick = {
                                 sharedMenuViewModel.confirmarPedido()
                                 println("Pedido Enviado")
+                                navController.popBackStack()
                                 navController.popBackStack()
                             }
                         )
