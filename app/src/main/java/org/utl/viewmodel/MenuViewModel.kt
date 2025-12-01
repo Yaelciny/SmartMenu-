@@ -67,6 +67,9 @@ class MenuViewModel(
             )
         }
     }
+    fun seleccionarMesa(numeroMesa: Int){
+        _uiState.update { it.copy(mesaSeleccionada = numeroMesa) }
+    }
 
     fun confirmarPedido(){
         viewModelScope.launch {
@@ -76,7 +79,7 @@ class MenuViewModel(
 
                 //Crear el Encabezado del Pedido
                 val nuevoPedido = Pedido(
-                    mesa = 1, // Fijo por ahora
+                    mesa = estadoActual.mesaSeleccionada,
                     estado = "Pendiente"
                 )
                 val idPedidoGenerado = pedidoRepository.insertPedido(nuevoPedido)

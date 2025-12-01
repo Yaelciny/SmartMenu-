@@ -22,6 +22,7 @@ import org.utl.db.PlatilloRepository
 import org.utl.ui.theme.SmartMenuTheme
 import org.utl.ui.theme.screens.LoginScreen
 import org.utl.ui.theme.screens.MenuScreen
+import org.utl.ui.theme.screens.MesasScreen
 import org.utl.ui.theme.screens.ResumenScreen
 import org.utl.viewmodel.MenuViewModel
 import org.utl.viewmodel.MenuViewModelFactory
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     composable("login") {
                         LoginScreen(
                             onLoginSuccess = {
-                                navController.navigate("menu"){
+                                navController.navigate("mesas"){
                                     popUpTo("login"){ inclusive = true}
                                 }
                             }
@@ -60,6 +61,16 @@ class MainActivity : ComponentActivity() {
                             onVerPedidoClick = {
                                 // Navegamos a la nueva pantalla
                                 navController.navigate("resumen")
+                            }
+                        )
+                    }
+
+                    composable("mesas") {
+                        MesasScreen(
+                            viewModel = sharedMenuViewModel,
+                            onMesaSelected = {
+                                //Al elegir la mesa, vamos al menu
+                                navController.navigate("menu")
                             }
                         )
                     }
