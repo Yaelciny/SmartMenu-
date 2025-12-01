@@ -23,4 +23,8 @@ interface UsuarioDao {
     //funcion para iniciar sesion, se valida correo y contraseña
     @Query("SELECT * FROM usuario WHERE email = :email AND password = :password LIMIT 1")
     suspend fun iniciarSesion (email: String, password: String): Usuario?
+
+    //aber si la tabla está vacía y crear usuarios de prueba
+    @Query("SELECT COUNT(*) FROM usuario")
+    suspend fun contarUsuarios(): Int
 }

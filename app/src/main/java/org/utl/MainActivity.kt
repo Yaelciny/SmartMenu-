@@ -3,14 +3,7 @@ package org.utl
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -19,13 +12,15 @@ import androidx.navigation.compose.rememberNavController
 import org.utl.db.AppDataBase
 import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
+import org.utl.db.UsuarioRepository
 import org.utl.ui.theme.SmartMenuTheme
 import org.utl.ui.theme.screens.LoginScreen
 import org.utl.ui.theme.screens.MenuScreen
 import org.utl.ui.theme.screens.MesasScreen
 import org.utl.ui.theme.screens.ResumenScreen
 import org.utl.viewmodel.MenuViewModel
-import org.utl.viewmodel.MenuViewModelFactory
+import org.utl.viewmodel.AppViewModelFactory
+import org.utl.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,16 +34,22 @@ class MainActivity : ComponentActivity() {
             database.pedidoDao(),
             database.pedidoDetalleDao() // <--- FALTABA ESTO
         )
+        val usuarioRepo = UsuarioRepository(database.usuarioDao())
         // Creamos la fábrica para el ViewModel
-        val factory = MenuViewModelFactory(platilloRepo,pedidoRepo)
+        val factory = AppViewModelFactory(platilloRepo,pedidoRepo,usuarioRepo)
         setContent {
             SmartMenuTheme {
                 val navController = rememberNavController()
                 val sharedMenuViewModel: MenuViewModel = viewModel(factory = factory)
+                val loginViewModel: LoginViewModel = viewModel(factory = factory)
                 NavHost(navController = navController, startDestination = "login"){
                     composable("login") {
                         LoginScreen(
-                            onLoginSuccess = {
+                            viewModel = loginViewModel,
+                            onLoginSuccess = { rolDetectado ->
+                                // Si es Mesero o Admin -> Mesas
+                                // Si fuera Cocinero -> Cocina (aun no existe)
+                                val destino = if (rolDetectado == "Cocinero") "mesas" else "mesas"
                                 navController.navigate("mesas"){
                                     popUpTo("login"){ inclusive = true}
                                 }
@@ -71,6 +72,12 @@ class MainActivity : ComponentActivity() {
                             onMesaSelected = {
                                 //Al elegir la mesa, vamos al menu
                                 navController.navigate("menu")
+                            },
+                            //Logica para cerrar sesion
+                            onLgout = {
+                                navController.navigate("login"){
+                                    popUpTo(0) {inclusive = true}
+                                }
                             }
                         )
                     }

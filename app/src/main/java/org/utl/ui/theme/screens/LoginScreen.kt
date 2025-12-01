@@ -25,9 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import org.utl.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(onLoginSuccess: () -> Unit){
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onLoginSuccess: (String) -> Unit
+){
     var usuario by remember { mutableStateOf("") }
     var contrasenia by remember { mutableStateOf("") }
 
@@ -59,7 +63,8 @@ fun LoginScreen(onLoginSuccess: () -> Unit){
             onValueChange = { usuario = it },
             label = { Text("Usuario") },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            isError = viewModel.hayError //Se pono rojo si hay error
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -71,14 +76,25 @@ fun LoginScreen(onLoginSuccess: () -> Unit){
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(), // Oculta los caracteres
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            isError = viewModel.hayError
         )
 
+        if (viewModel.hayError){
+            Text(
+                "Usuario o contrasenia incorrecta",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
             onClick = {
-                onLoginSuccess()
+                viewModel.validarLogin(usuario,contrasenia){ rolDetecatdo ->
+                    onLoginSuccess(rolDetecatdo)
+                }
             },
             modifier = Modifier.height(50.dp)
         ) {

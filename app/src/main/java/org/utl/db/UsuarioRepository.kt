@@ -1,5 +1,4 @@
 package org.utl.db
-
 import kotlinx.coroutines.flow.Flow
 import org.utl.dao.PlatilloDao
 import org.utl.dao.UsuarioDao
@@ -18,5 +17,16 @@ class UsuarioRepository (private val usuarioDao: UsuarioDao) {
         return usuarioDao.iniciarSesion(email,password)
     }
 
+    //Generar usuarios para entrar a la app
+    suspend fun generarUsuariosDefault(){
+        if (usuarioDao.contarUsuarios() == 0 ){
+            val lista = listOf(
+                Usuario(nombre = "Mesero", email = "mesero@gmail.com", password = "Mesero", rol = "Mesero"),
+                Usuario(nombre = "Cocinero", email = "cocina@gmail.com", password = "Cocinero", rol = "Cocinero"),
+                Usuario(nombre = "Admin", email = "admin@gmail.com", password = "Admin", rol = "Administrador")
+            )
+            lista.forEach { usuarioDao.insertUsuario(it) }
+        }
+    }
 
 }
