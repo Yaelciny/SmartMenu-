@@ -51,7 +51,7 @@ fun AdminScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Gestion de Menu") },
+                title = { Text("Gestión de Menú") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer
                 ),
@@ -59,7 +59,7 @@ fun AdminScreen(
                     IconButton(onClick = onLogout) {
                         Icon(
                             imageVector = Icons.Default.ExitToApp,
-                            contentDescription = "Cerrar Sesion",
+                            contentDescription = "Cerrar Sesión",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -68,7 +68,7 @@ fun AdminScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {mostrarDialogo = true}) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar Platillo")
+                Icon(Icons.Default.Add, contentDescription = "Agregar platillo")
             }
         }
     ) { paddingValues ->

@@ -44,10 +44,10 @@ fun ResumenScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Confirmas Pedido") },
+                title = { Text("¿Confirmas pedido?") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Atras")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -72,7 +72,7 @@ fun ResumenScreen(
                     Button(onClick = onConfirmarClick) {
                         Icon(Icons.Default.Check, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Enviar a Cocina")
+                        Text("Enviar a cocina")
                     }
                 }
             }

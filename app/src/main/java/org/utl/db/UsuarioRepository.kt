@@ -17,7 +17,7 @@ class UsuarioRepository (private val usuarioDao: UsuarioDao) {
         return usuarioDao.iniciarSesion(email,password)
     }
 
-    //Generar usuarios para entrar a la app
+    //Generar usuarios para entrar a la appp
     suspend fun generarUsuariosDefault(){
         if (usuarioDao.contarUsuarios() == 0 ){
             val lista = listOf(

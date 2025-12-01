@@ -49,11 +49,11 @@ fun MenuScreen(
                         )
                     },
                     text = {
-                        // Muestra la cantidad de platillos y el total
+                        // Muestra la cantidad de platillos y el totall
                         Text(text = "Ver Pedido (${state.pedidoActual.size}) - $${state.total}")
                     }
                 )
-            }
+            } //bien
         }
     ) { paddingValues ->
         LazyColumn(

@@ -46,7 +46,7 @@ fun PlatiloCard(platillo: Platillo, onAddClick : () -> Unit){
             }
             Button(onClick = onAddClick) {
                 Text(text = "+")
-            }
+            } //quedó.
         }
     }
 }

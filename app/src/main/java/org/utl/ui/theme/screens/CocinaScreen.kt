@@ -56,7 +56,7 @@ fun CocinaScreen(
                     IconButton(onClick = onLogout) {
                         Icon(
                             imageVector = Icons.Default.ExitToApp,
-                            contentDescription = "Cerrar Sesion",
+                            contentDescription = "Cerrar Sesión",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }

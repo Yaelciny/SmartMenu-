@@ -59,7 +59,7 @@ fun MesasScreen(
             modifier = Modifier.padding(paddingValues).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Que mesara atenderas",
+            Text("¿Que mesara atenderás?",
                 style = MaterialTheme.typography.titleMedium)
 
             Spacer(modifier = Modifier.height(16.dp))

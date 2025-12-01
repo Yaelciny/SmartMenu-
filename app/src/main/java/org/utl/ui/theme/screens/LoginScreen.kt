@@ -82,7 +82,7 @@ fun LoginScreen(
 
         if (viewModel.hayError){
             Text(
-                "Usuario o contrasenia incorrecta",
+                "Usuario o contraseña incorrecta",
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 8.dp)
@@ -98,7 +98,7 @@ fun LoginScreen(
             },
             modifier = Modifier.height(50.dp)
         ) {
-            Text("Iniciar Sesion")
+            Text("Iniciar Sesión")
         }
     }
 }
