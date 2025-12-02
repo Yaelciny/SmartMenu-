@@ -98,6 +98,11 @@ fun AdminScreen(
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
+                            Text(
+                                text = "Existencia: ${platillo.stock}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = if (platillo.stock < 5) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                            )
                         }
                         Text(
                             "$${platillo.precio}",
@@ -112,7 +117,7 @@ fun AdminScreen(
             DialogoNuevoPlatillo(
                 onDismiss = { mostrarDialogo = false },
                 onConfirm = { nombre, precio, stock ->
-                    viewModel.agregarPlatillo(nombre, precio)
+                    viewModel.agregarPlatillo(nombre, precio,stock)
                     mostrarDialogo = false
                 }
             )

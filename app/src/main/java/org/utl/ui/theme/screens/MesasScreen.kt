@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,8 +32,9 @@ import org.utl.viewmodel.MenuViewModel
 fun MesasScreen(
     viewModel: MenuViewModel,
     onMesaSelected: () -> Unit,
-    onLgout: () -> Unit
-){
+    onLgout: () -> Unit,
+    onVerClientes :() -> Unit,
+    ){
     //Mesa del 1 al 10
     val listaMesa = (1..10).toList()
 
@@ -43,6 +45,11 @@ fun MesasScreen(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 ),
+                navigationIcon = {
+                    IconButton(onClick = onVerClientes) {
+                        Icon(Icons.Default.Person   , contentDescription = "Clientes")
+                    }
+                },
                 actions = {
                     IconButton(onClick = onLgout) {
                         Icon(

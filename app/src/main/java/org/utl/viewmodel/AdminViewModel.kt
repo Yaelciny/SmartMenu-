@@ -21,7 +21,7 @@ class AdminViewModel(private val repository: PlatilloRepository,
             initialValue = emptyList()
         )
 
-    fun agregarPlatillo(nombre: String, precio: Double, stock: Int = 0){
+    fun agregarPlatillo(nombre: String, precio: Double, stock: Int){
         viewModelScope.launch {
             val nuevoPlatillo = Platillo(
                 nombre = nombre,

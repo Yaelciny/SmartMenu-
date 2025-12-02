@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.utl.db.AppDataBase
+import org.utl.db.ClienteRepository
 import org.utl.db.InsumoRepository
 import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
@@ -17,6 +18,7 @@ import org.utl.db.UsuarioRepository
 import org.utl.ui.theme.SmartMenuTheme
 import org.utl.ui.theme.screens.AdminInsumoScreen
 import org.utl.ui.theme.screens.AdminScreen
+import org.utl.ui.theme.screens.ClienteScreen
 import org.utl.ui.theme.screens.CocinaScreen
 import org.utl.ui.theme.screens.LoginScreen
 import org.utl.ui.theme.screens.MenuScreen
@@ -44,9 +46,10 @@ class MainActivity : ComponentActivity() {
         )
         val usuarioRepo = UsuarioRepository(database.usuarioDao())
         val insumoRepo = InsumoRepository(database.insumoDao())
+        val clienteRepo = ClienteRepository(database.clienteDao())
 
         // Creamos la fábrica para el ViewModel
-        val factory = AppViewModelFactory(platilloRepo,pedidoRepo,insumoRepo,usuarioRepo)
+        val factory = AppViewModelFactory(platilloRepo,pedidoRepo,insumoRepo,usuarioRepo,clienteRepo)
         setContent {
             SmartMenuTheme {
                 val navController = rememberNavController()
@@ -118,6 +121,9 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate("login"){
                                     popUpTo(0) {inclusive = true}
                                 }
+                            },
+                            onVerClientes = {
+                                navController.navigate("clientes")
                             }
                         )
                     }
@@ -142,6 +148,12 @@ class MainActivity : ComponentActivity() {
                                 navController.popBackStack()
                                 navController.popBackStack()
                             }
+                        )
+                    }
+                    composable("clientes") {
+                        ClienteScreen(
+                            viewModel = sharedMenuViewModel,
+                            onBack = {navController.popBackStack()}
                         )
                     }
             }

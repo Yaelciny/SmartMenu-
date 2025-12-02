@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import org.utl.dao.ClienteDao
 import org.utl.dao.InsumoDao
 import org.utl.dao.PedidoDao
 import org.utl.dao.PedidoDetalleDao
 import org.utl.dao.PlatilloDao
 import org.utl.dao.UsuarioDao
+import org.utl.model.Cliente
 import org.utl.model.Insumo
 import org.utl.model.Pedido
 import org.utl.model.PedidoDetalle
@@ -18,8 +20,8 @@ import org.utl.model.Usuario
 // Agrega aki tus las otras cuando esten listas
 // por ahora solo con Platillo
 
-@Database(entities = [Platillo::class, Usuario::class, Pedido::class, PedidoDetalle::class, Insumo::class],
-    version = 3)
+@Database(entities = [Platillo::class, Usuario::class, Pedido::class, PedidoDetalle::class, Insumo::class, Cliente::class],
+    version = 4)
 
 abstract class AppDataBase : RoomDatabase(){
 
@@ -28,6 +30,7 @@ abstract class AppDataBase : RoomDatabase(){
     abstract fun pedidoDao(): PedidoDao
     abstract fun pedidoDetalleDao(): PedidoDetalleDao
     abstract fun insumoDao(): InsumoDao
+    abstract fun clienteDao(): ClienteDao
 
     companion object {
         @Volatile

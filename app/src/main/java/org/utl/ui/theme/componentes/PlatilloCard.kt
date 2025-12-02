@@ -45,7 +45,7 @@ fun PlatiloCard(platillo: Platillo, onAddClick : () -> Unit){
                 )
                 //Texto para mostrar stock
                 Text(
-                    text = "Stock: $${platillo.stock}",
+                    text = "Stock: ${platillo.stock}",
                     style =  MaterialTheme.typography.bodySmall
                 )
             }
