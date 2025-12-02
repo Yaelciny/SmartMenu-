@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,13 +22,23 @@ import org.utl.viewmodel.MenuViewModel
 @Composable
 fun MenuScreen(
     viewModel: MenuViewModel = viewModel(),
-    onVerPedidoClick: () -> Unit = {} // Nuevo evento para navegar
+    onVerPedidoClick: () -> Unit = {} ,// Nuevo evento para navegar
+    onLogout: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = onLogout) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Regresar",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
                 title = { Text("Menú del Día") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,

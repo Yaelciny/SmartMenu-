@@ -105,7 +105,6 @@ fun ResumenScreen(
                     ListItem(
                         headlineContent = { Text(detalle.nombre) },
                         trailingContent = { Text("$${detalle.precio}", fontWeight = FontWeight.Bold) },
-                        leadingContent = { Text("${detalle.stock}x") }
                     )
                     Divider()
                 }

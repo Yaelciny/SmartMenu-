@@ -105,6 +105,9 @@ class MainActivity : ComponentActivity() {
                             viewModel = sharedMenuViewModel,
                             onVerPedidoClick = {
                                 navController.navigate("resumen")
+                            },
+                            onLogout = {
+                                navController.navigate("mesas")
                             }
                         )
                     }
