@@ -111,7 +111,7 @@ fun AdminScreen(
         if (mostrarDialogo) {
             DialogoNuevoPlatillo(
                 onDismiss = { mostrarDialogo = false },
-                onConfirm = { nombre, precio ->
+                onConfirm = { nombre, precio, stock ->
                     viewModel.agregarPlatillo(nombre, precio)
                     mostrarDialogo = false
                 }
@@ -122,10 +122,11 @@ fun AdminScreen(
 
 @Composable
 fun DialogoNuevoPlatillo(onDismiss: () -> Unit,
-                         onConfirm: (String, Double) -> Unit
+                         onConfirm: (String, Double, Int) -> Unit
 ) {
     var nombre by remember { mutableStateOf("") }
     var precioStr by remember { mutableStateOf("") }
+    var stockStr by remember {mutableStateOf("")}
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -143,13 +144,20 @@ fun DialogoNuevoPlatillo(onDismiss: () -> Unit,
                     label = { Text("Precio ($)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
+                OutlinedTextField(
+                    value = stockStr,
+                    onValueChange = { stockStr = it },
+                    label = { Text("Cantidad") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
             }
         },
         confirmButton = {
             Button(onClick = {
                 val precio = precioStr.toDoubleOrNull()?:0.0
+                val stock = stockStr.toIntOrNull()?:0
                 if (nombre.isNotEmpty() && precio > 0) {
-                    onConfirm(nombre, precio)
+                    onConfirm(nombre, precio, stock)
                 }
             }) { Text("Guardar")}
         },

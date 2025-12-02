@@ -43,8 +43,16 @@ fun PlatiloCard(platillo: Platillo, onAddClick : () -> Unit){
                     style =  MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
+                //Texto para mostrar stock
+                Text(
+                    text = "Stock: $${platillo.stock}",
+                    style =  MaterialTheme.typography.bodySmall
+                )
             }
-            Button(onClick = onAddClick) {
+            Button(
+                onClick = onAddClick,
+                enabled = platillo.disponible && platillo.stock > 0
+            ) {
                 Text(text = "+")
             } //quedó.
         }
