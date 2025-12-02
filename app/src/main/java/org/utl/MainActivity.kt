@@ -35,8 +35,10 @@ class MainActivity : ComponentActivity() {
         // Creamos el repositorio con el DAO de esa BD
         val platilloRepo = PlatilloRepository(database.platilloDao())
         val pedidoRepo = PedidoRepository(
+            database,
             database.pedidoDao(),
-            database.pedidoDetalleDao() // <--- FALTABA ESTO
+            database.pedidoDetalleDao(), // <--- FALTABA ESTO
+            database.platilloDao()
         )
         val usuarioRepo = UsuarioRepository(database.usuarioDao())
 

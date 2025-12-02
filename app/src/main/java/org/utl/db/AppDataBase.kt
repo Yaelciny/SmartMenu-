@@ -16,7 +16,7 @@ import org.utl.model.Usuario
 // Agrega aki tus las otras cuando esten listas
 // por ahora solo con Platillo
 @Database(entities = [Platillo::class, Usuario::class, Pedido::class, PedidoDetalle::class],
-    version = 2)
+    version = 3)
 abstract class AppDataBase : RoomDatabase(){
 
     abstract fun platilloDao(): PlatilloDao
