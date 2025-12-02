@@ -9,5 +9,7 @@ data class Platillo (
     val id: Int = 0,
     val nombre: String,
     val precio: Double,
-    val disponible: Boolean
+    val disponible: Boolean,
+    //Se agrega campo stock
+    val stock : Int = 0
 )

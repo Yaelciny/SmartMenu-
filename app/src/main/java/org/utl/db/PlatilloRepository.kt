@@ -16,4 +16,16 @@ class PlatilloRepository (private val platilloDao: PlatilloDao) {
     suspend fun insertarVarios(platillos: List<Platillo>) {
         platilloDao.insertarVarios(platillos)
     }
+
+    suspend fun actualizarStock(id: Int, nuevoStock: Int): Boolean{
+        return platilloDao.actualizarStock(id, nuevoStock) > 0
+    }
+
+    suspend fun restarStockDisponible(id: Int, cantidad: Int): Boolean{
+        return platilloDao.restarStockDisponible(id, cantidad) > 0
+    }
+
+    suspend fun obtenerStock(id: Int): Int?{
+        return platilloDao.obtenerStockId(id)
+    }
 }
