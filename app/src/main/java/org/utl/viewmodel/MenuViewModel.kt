@@ -21,7 +21,7 @@ class MenuViewModel(
     private val repository: PlatilloRepository,
     private val pedidoRepository: PedidoRepository
         ) : ViewModel(){
-    //El estado privado significa que solo el viewmodel lo puede modificar
+    //El estado privado significa que solo el viewmodel lo puede modificarczx
     private val _uiState = MutableStateFlow(MenuUiState())
     //El estado publico la ui solo se puede leerdd
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
