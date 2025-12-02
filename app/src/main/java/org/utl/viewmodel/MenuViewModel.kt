@@ -23,7 +23,7 @@ class MenuViewModel(
         ) : ViewModel(){
     //El estado privado significa que solo el viewmodel lo puede modificar
     private val _uiState = MutableStateFlow(MenuUiState())
-    //El estado publico la ui solo se puede leer
+    //El estado publico la ui solo se puede leerdd
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
 
     init {
