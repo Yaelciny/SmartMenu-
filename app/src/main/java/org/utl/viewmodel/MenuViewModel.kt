@@ -82,7 +82,6 @@ class MenuViewModel(
                     mesa = estadoActual.mesaSeleccionada,
                     estado = "Pendiente"
                 )
-                val idPedidoGenerado = pedidoRepository.insertPedido(nuevoPedido)
 
                 // Agrupar platillos iguales para sacar la cantidad
                 // Convertimos la lista plana (Hamburguesa, Refresco, Hamburguesa)
@@ -92,7 +91,7 @@ class MenuViewModel(
                 // Crear los objetos Detalle con los datos que pide tu tabla
                 val listaDetalles = platillosAgrupados.map { (platillo, cantidadContada) ->
                     PedidoDetalle(
-                        idPedido = idPedidoGenerado.toInt(),
+                        idPedido = 0,
                         idPlatillo = platillo.id,
                         nombrePedido = platillo.nombre,
                         precioPedido = platillo.precio,
@@ -100,12 +99,16 @@ class MenuViewModel(
                     )
                 }
 
-                pedidoRepository.insertDetalle(listaDetalles)
-
-                _uiState.update {
-                    it.copy(pedidoActual = emptyList(), total = 0.0)
+                val exito = pedidoRepository.insertarPedidoConStock(nuevoPedido, listaDetalles)
+                //validacion para el withtransaction
+                if (exito){
+                    _uiState.update {
+                        it.copy(pedidoActual = emptyList(), total = 0.0)
+                    }
+                    println("Pedido guardado con su detalle.")
+                } else {
+                    println("No se pudo guardar el pedido.")
                 }
-                println("Pedido #$idPedidoGenerado guardado con su detalle.")
             }
         }
     }
