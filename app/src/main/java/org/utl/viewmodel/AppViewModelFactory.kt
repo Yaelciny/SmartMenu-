@@ -2,6 +2,7 @@ package org.utl.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.utl.db.InsumoRepository
 import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
 import org.utl.db.UsuarioRepository
@@ -12,6 +13,7 @@ import org.utl.db.UsuarioRepository
 class AppViewModelFactory(
     private val platilloRepository: PlatilloRepository,
     private val pedidoRepository: PedidoRepository,
+    private val insumoRepository: InsumoRepository,
     private val usuarioRepository: UsuarioRepository
     ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -29,7 +31,7 @@ class AppViewModelFactory(
         }
         if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AdminViewModel(platilloRepository) as T
+            return AdminViewModel(platilloRepository, insumoRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

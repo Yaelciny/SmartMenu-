@@ -9,5 +9,5 @@ data class Pedido(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val mesa: Int,
-    val estado: String //aki podemos poner si esta pendiente, finalizado, en proceso y asi
+    val estado: String, //aki podemos poner si esta pendiente, finalizado, en proceso y asi
 )
