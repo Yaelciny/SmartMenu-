@@ -10,10 +10,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.utl.db.AppDataBase
+import org.utl.db.InsumoRepository
 import org.utl.db.PedidoRepository
 import org.utl.db.PlatilloRepository
 import org.utl.db.UsuarioRepository
 import org.utl.ui.theme.SmartMenuTheme
+import org.utl.ui.theme.screens.AdminInsumoScreen
 import org.utl.ui.theme.screens.AdminScreen
 import org.utl.ui.theme.screens.CocinaScreen
 import org.utl.ui.theme.screens.LoginScreen
@@ -41,9 +43,10 @@ class MainActivity : ComponentActivity() {
             database.platilloDao()
         )
         val usuarioRepo = UsuarioRepository(database.usuarioDao())
+        val insumoRepo = InsumoRepository(database.insumoDao())
 
         // Creamos la fábrica para el ViewModel
-        val factory = AppViewModelFactory(platilloRepo,pedidoRepo,usuarioRepo)
+        val factory = AppViewModelFactory(platilloRepo,pedidoRepo,insumoRepo,usuarioRepo)
         setContent {
             SmartMenuTheme {
                 val navController = rememberNavController()
@@ -75,7 +78,21 @@ class MainActivity : ComponentActivity() {
                             viewModel = adminViewModel,
                             onLogout = {
                                 navController.navigate("login"){
-                                    popUpTo(0){ inclusive = true}
+                                    popUpTo(0){ inclusive = true }
+                                }
+                            },
+                            onVerInsumos = {
+                                navController.navigate("insumo")
+                            }
+                        )
+                    }
+
+                    composable("insumo") {
+                        AdminInsumoScreen (
+                            viewModel = adminViewModel,
+                            onLogout = {
+                                navController.navigate("admin"){
+                                    popUpTo(0) {inclusive = true}
                                 }
                             }
                         )

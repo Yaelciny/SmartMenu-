@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -42,37 +42,28 @@ import org.utl.viewmodel.AdminViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdminScreen(
-    viewModel: AdminViewModel,
-    onLogout: () -> Unit,
-    onVerInsumos: () -> Unit
+fun AdminInsumoScreen (viewModel: AdminViewModel,
+                       onLogout: () -> Unit
 ){
-    val platillos by viewModel.listaPlatillo.collectAsState()
+    val insumos by viewModel.listaInsumo.collectAsState()
     var mostrarDialogo by remember { mutableStateOf(false) }
 
-    Scaffold(
+    Scaffold (
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Gestión de Menú") },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                ),
                 navigationIcon = {
                     IconButton(onClick = onLogout) {
                         Icon(
-                            imageVector = Icons.Default.ExitToApp,
-                            contentDescription = "Cerrar Sesión",
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Regresar",
                             tint = MaterialTheme.colorScheme.primary
                         )
-                    } },
-                actions = {
-                    TextButton(onClick = onVerInsumos) {
-                        Text(
-                            text = "Insumos",
-                            color = MaterialTheme.colorScheme.primary
-                        )
                     }
-                }
+                },
+                title = { Text("Insumos") },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                )
             )
         },
         floatingActionButton = {
@@ -85,7 +76,7 @@ fun AdminScreen(
             modifier = Modifier.padding(paddingValues).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(platillos) {platillo ->
+            items(insumos) {insumo ->
                 Card(elevation = CardDefaults.cardElevation(2.dp)) {
                     Row(
                         modifier = Modifier.padding(16.dp)
@@ -94,13 +85,13 @@ fun AdminScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column{
-                            Text(platillo.nombre,
+                            Text(insumo.nombre,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         Text(
-                            "$${platillo.precio}",
+                            "${insumo.stock} ${insumo.unidad}",
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -109,10 +100,10 @@ fun AdminScreen(
             }
         }
         if (mostrarDialogo) {
-            DialogoNuevoPlatillo(
+            DialogoNuevoInsumo (
                 onDismiss = { mostrarDialogo = false },
-                onConfirm = { nombre, precio ->
-                    viewModel.agregarPlatillo(nombre, precio)
+                onConfirm = { nombre, stock, unidad ->
+                    viewModel.agregarInsumo(nombre, stock, unidad)
                     mostrarDialogo = false
                 }
             )
@@ -121,11 +112,12 @@ fun AdminScreen(
 }
 
 @Composable
-fun DialogoNuevoPlatillo(onDismiss: () -> Unit,
-                         onConfirm: (String, Double) -> Unit
+fun DialogoNuevoInsumo(onDismiss: () -> Unit,
+                         onConfirm: (String, Int, String) -> Unit
 ) {
     var nombre by remember { mutableStateOf("") }
-    var precioStr by remember { mutableStateOf("") }
+    var stock by remember { mutableStateOf("") }
+    var unidad by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -135,21 +127,26 @@ fun DialogoNuevoPlatillo(onDismiss: () -> Unit,
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
-                    label = { Text("Nombre del Platillo") }
+                    label = { Text("Nombre del Insumo") }
                 )
                 OutlinedTextField(
-                    value = precioStr,
-                    onValueChange = { precioStr = it },
-                    label = { Text("Precio ($)") },
+                    value = stock,
+                    onValueChange = { stock = it },
+                    label = { Text("Stock disponible") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = unidad,
+                    onValueChange = { unidad = it },
+                    label = { Text("Unidad de medida (kg, ml, l)") },
                 )
             }
         },
         confirmButton = {
             Button(onClick = {
-                val precio = precioStr.toDoubleOrNull()?:0.0
-                if (nombre.isNotEmpty() && precio > 0) {
-                    onConfirm(nombre, precio)
+                val stock = stock.toInt()
+                if (nombre.isNotEmpty() && stock > 0 && unidad.isNotEmpty()) {
+                    onConfirm(nombre, stock, unidad)
                 }
             }) { Text("Guardar")}
         },
